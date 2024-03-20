@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Calculation Tool</title>
+    <style>
+        body {
+            background-color: #591de2;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            padding: 20px;
+        }
+        .calculator {
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            opacity: 1;
+        }
+    </style>
+    <script>
+        function formatNumber(num) {
+            return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function calculateSumVATAndTotal() {
+            var numbersString = document.getElementById("numbersInput").value;
+            var numbersArray = numbersString.split('-').map(function(item) { return parseFloat(item); });
+            var sum = numbersArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            var vat = sum * 0.15;
+            var totalPrice = sum + vat;
+            document.getElementById("sumResult").textContent = "Sum: " + formatNumber(sum);
+            document.getElementById("vatResult").textContent = "VAT Price: " + formatNumber(vat);
+            document.getElementById("totalResult").textContent = "Total Price: " + formatNumber(totalPrice);
+        }
+
+        function calculateUnitPriceTotal() {
+            var pricePerUnit = parseFloat(document.getElementById("pricePerUnit").value);
+            var numberOfUnits = parseFloat(document.getElementById("numberOfUnits").value);
+            var adjustedUnitPrice = pricePerUnit * 10;
+            var totalUnitPrice = adjustedUnitPrice * numberOfUnits;
+            document.getElementById("unitPriceTotalResult").textContent = "Total Price for Units: " + formatNumber(totalUnitPrice);
+        }
+    </script>
+</head>
+<body>
+
+<div class="container">
+    <div class="calculator">
+        <h2>Sum, VAT, and Total Calculator</h2>
+        <label>Enter numbers separated by dashes (-):</label><br>
+        <input type="text" id="numbersInput" placeholder="Example: 1.5-2.5-3.75"><br><br>
+        <button onclick="calculateSumVATAndTotal()">Calculate Sum, VAT, and Total</button>
+        <div id="sumResult"></div>
+        <div id="vatResult"></div>
+        <div id="totalResult"></div>
+    </div>
+    
+    <div class="calculator">
+        <h2>Unit Price Calculator</h2>
+        <label>Price Per Unit:</label><br>
+        <input type="number" id="pricePerUnit" placeholder="Price per unit" onwheel="this.blur()"><br>
+        <label>Number of Units:</label><br>
+        <input type="number" id="numberOfUnits" placeholder="Number of units" onwheel="this.blur()"><br><br>
+        <button onclick="calculateUnitPriceTotal()">Calculate Total Unit Price</button>
+        <div id="unitPriceTotalResult"></div>
+    </div>
+</div>
+
+</body>
+</html>
