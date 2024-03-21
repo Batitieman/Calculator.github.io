@@ -52,7 +52,7 @@
             var numberOfUnits = parseFloat(document.getElementById("numberOfUnits").value);
             var adjustedUnitPrice = pricePerUnit * 10;
             var totalUnitPrice = adjustedUnitPrice * numberOfUnits;
-            document.getElementById("adjustedPriceNote").textContent = "Adjusted Price Per Unit (x10): " + formatNumber(adjustedUnitPrice);
+            document.getElementById("adjustedPriceNote").textContent = "Price from Euro to SAR: " + formatNumber(adjustedUnitPrice);
             document.getElementById("unitPriceTotalResult").textContent = "Total Price for Units: " + formatNumber(totalUnitPrice);
         }
 
