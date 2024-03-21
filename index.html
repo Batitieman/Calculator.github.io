@@ -46,6 +46,7 @@
             var pricePerUnit = parseFloat(document.getElementById("pricePerUnit").value);
             var numberOfUnits = parseFloat(document.getElementById("numberOfUnits").value);
             var adjustedUnitPrice = pricePerUnit * 10;
+            document.getElementById("adjustedPriceNote").textContent = "Price per unit after x10: " + formatNumber(adjustedUnitPrice);
             var totalUnitPrice = adjustedUnitPrice * numberOfUnits;
             document.getElementById("unitPriceTotalResult").textContent = "Total Price for Units: " + formatNumber(totalUnitPrice);
         }
@@ -71,6 +72,7 @@
         <label>Number of Units:</label><br>
         <input type="number" id="numberOfUnits" placeholder="Number of units" onwheel="this.blur()"><br><br>
         <button onclick="calculateUnitPriceTotal()">Calculate Total Unit Price</button>
+        <div id="adjustedPriceNote"></div> <!-- Placeholder for the adjusted price note -->
         <div id="unitPriceTotalResult"></div>
     </div>
 </div>
