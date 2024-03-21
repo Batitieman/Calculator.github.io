@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Balkhair Calculator</title>
+    <title>Advanced Calculation Tool</title>
     <style>
         body {
             background-color: #591de2;
@@ -10,80 +10,89 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
         .container {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             gap: 50px;
             padding: 20px;
-            flex-direction: row-reverse; /* Switches the side of calculators */
         }
         .calculator {
             padding: 20px;
             border-radius: 10px;
             background: rgba(0, 0, 0, 0.2);
         }
-        .title {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             opacity: 1;
         }
     </style>
+    <script>
+        function formatNumber(num) {
+            return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " SAR";
+        }
+
+        function calculateSumVATAndTotal() {
+            var numbersString = document.getElementById("numbersInput").value;
+            var numbersArray = numbersString.split('-').map(function(item) { return parseFloat(item); });
+            var sum = numbersArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+            var vat = sum * 0.15;
+            var totalPrice = sum + vat;
+            document.getElementById("sumResult").textContent = "Sum: " + formatNumber(sum);
+            document.getElementById("vatResult").textContent = "VAT Price: " + formatNumber(vat);
+            document.getElementById("totalResult").textContent = "Total Price: " + formatNumber(totalPrice);
+        }
+
+        function calculateUnitPriceTotal() {
+            var pricePerUnit = parseFloat(document.getElementById("pricePerUnit").value);
+            var numberOfUnits = parseFloat(document.getElementById("numberOfUnits").value);
+            var adjustedUnitPrice = pricePerUnit * 10;
+            var totalUnitPrice = adjustedUnitPrice * numberOfUnits;
+            document.getElementById("adjustedPriceNote").textContent = "Adjusted Price Per Unit (x10): " + formatNumber(adjustedUnitPrice);
+            document.getElementById("unitPriceTotalResult").textContent = "Total Price for Units: " + formatNumber(totalUnitPrice);
+        }
+
+        function adjustNumberInput(e, elementId) {
+            e.preventDefault();
+            var input = document.getElementById(elementId);
+            var step = parseFloat(input.step) || 1;
+            var currentValue = parseFloat(input.value) || 0;
+            currentValue += e.deltaY < 0 ? step : -step;
+            input.value = currentValue;
+            calculateUnitPriceTotal();
+        }
+    </script>
 </head>
 <body>
 
-<div class="title">Balkhair Calculator</div> <!-- Title added above calculators -->
+<h1>Calculation Tools</h1>
 
 <div class="container">
     <div class="calculator">
-        <h2>Unit Price Calculator</h2>
-        <label>Price Per Unit:</label><br>
-        <input type="number" id="pricePerUnit" placeholder="Price per unit" onwheel="this.blur()"><br>
-        <label>Number of Units:</label><br>
-        <input type="number" id="numberOfUnits" placeholder="Number of units" onwheel="this.blur()"><br><br>
-        <button onclick="calculateUnitPriceTotal()">Calculate Total Unit Price</button>
-        <div id="adjustedPriceNote"></div> <!-- Placeholder for the adjusted price note -->
-        <div id="unitPriceTotalResult"></div>
-    </div>
-    
-    <div class="calculator">
-        <h2>Sum, VAT, and Total Calculator</h2>
+        <h2>Total Calculator</h2>
         <label>Enter numbers separated by dashes (-):</label><br>
         <input type="text" id="numbersInput" placeholder="Example: 1.5-2.5-3.75"><br><br>
-        <button onclick="calculateSumVATAndTotal()">Calculate Sum, VAT, and Total</button>
+        <button onclick="calculateSumVATAndTotal()">Calculate Total</button>
         <div id="sumResult"></div>
         <div id="vatResult"></div>
         <div id="totalResult"></div>
     </div>
+    
+    <div class="calculator">
+        <h2>Unit Price Calculator</h2>
+        <label>Price Per Unit:</label><br>
+        <input type="number" id="pricePerUnit" placeholder="Price per unit" onwheel="adjustNumberInput(event, 'pricePerUnit')"><br>
+        <label>Number of Units:</label><br>
+        <input type="number" id="numberOfUnits" placeholder="Number of units" onwheel="adjustNumberInput(event, 'numberOfUnits')"><br><br>
+        <button onclick="calculateUnitPriceTotal()">Calculate Total Unit Price</button>
+        <div id="adjustedPriceNote"></div> <!-- Placeholder for the adjusted price note -->
+        <div id="unitPriceTotalResult"></div>
+    </div>
 </div>
-
-<script>
-    function formatNumber(num) {
-        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    function calculateSumVATAndTotal() {
-        var numbersString = document.getElementById("numbersInput").value;
-        var numbersArray = numbersString.split('-').map(function(item) { return parseFloat(item); });
-        var sum = numbersArray.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-        var vat = sum * 0.15;
-        var totalPrice = sum + vat;
-        document.getElementById("sumResult").textContent = "Sum: " + formatNumber(sum);
-        document.getElementById("vatResult").textContent = "VAT Price: " + formatNumber(vat);
-        document.getElementById("totalResult").textContent = "Total Price: " + formatNumber(totalPrice);
-    }
-
-    function calculateUnitPriceTotal() {
-        var pricePerUnit = parseFloat(document.getElementById("pricePerUnit").value);
-        var numberOfUnits = parseFloat(document.getElementById("numberOfUnits").value);
-        var adjustedUnitPrice = pricePerUnit * 10;
-        var totalUnitPrice = adjustedUnitPrice * numberOfUnits;
-        document.getElementById("adjustedPriceNote").textContent = "Price per unit after x10: " + formatNumber(adjustedUnitPrice);
-        document.getElementById("unitPriceTotalResult").textContent = "Total Price for Units: " + formatNumber(totalUnitPrice);
-    }
-</script>
 
 </body>
 </html>
